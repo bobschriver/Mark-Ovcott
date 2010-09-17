@@ -4,22 +4,27 @@ import os
 import HTMLParser
 
 num_results = 100
+script_dir = "/users/u16/schriver/projects/personal/mark_ovcott/"
+
 
 search_terms = ['#tcot' , '#teaparty' , '#wreckingcrew' , '#twisters' , '#gop' , '#ocra' , '#sgp']
 
-data_filename = "/users/u16/schriver/projects/personal/mark_ovcott/twitter-data"
-last_search_filename = "/users/u16/schriver/projects/personal/mark_ovcott/last_search_time"
+data_filename = "twitter-data"
+last_search_filename = "last_search_time"
+
+data_filename_abs = script_dir + data_filename
+last_search_filename_abs = script_dir + last_search_filename
 
 
-if not os.path.exists(data_filename):
+if not os.path.exists(data_filename_abs):
 	data_map = dict()
 else:
-	data_map = pickle.load(open(data_filename))
+	data_map = pickle.load(open(data_filename_abs))
 
-if not os.path.exists(last_search_filename):
+if not os.path.exists(last_search_filename_abs):
 	last_search_time_map = {}
 else:
-	last_search_time_map = pickle.load(open(last_search_filename))
+	last_search_time_map = pickle.load(open(last_search_filename_abs))
 
 api = twitter.Api()
 html_parser = HTMLParser.HTMLParser()
@@ -50,8 +55,8 @@ for search_term in search_terms:
 			else:
 				data_map[key] = [value]
 
-pickle.dump(data_map , open(data_filename , "w"))
-pickle.dump(last_search_time_map , open(last_search_filename, "w"))
+pickle.dump(data_map , open(data_filename_abs , "w"))
+pickle.dump(last_search_time_map , open(last_search_filename_abs, "w"))
 
 
 
