@@ -3,9 +3,9 @@ import pickle
 import os
 import HTMLParser
 
-num_results = 200
+num_results = 100
 
-search_terms = ['tcot' , 'teaparty' , 'wreckingcrew' , 'twisters']
+search_terms = ['#tcot' , '#teaparty' , '#wreckingcrew' , '#twisters' , '#gop' , '#ocra' , '#sgp']
 
 data_filename = "/users/u16/schriver/projects/personal/mark_ovcott/twitter-data"
 last_search_filename = "/users/u16/schriver/projects/personal/mark_ovcott/last_search_time"
