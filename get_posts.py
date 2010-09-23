@@ -2,9 +2,7 @@ import twitter
 import pickle
 import os
 import HTMLParser
-import gc
-
-gc.disable()
+import re
 
 num_results = 100
 script_dir = "/users/u16/schriver/projects/personal/mark_ovcott/"
@@ -46,26 +44,40 @@ for search_term in search_terms:
 	last_search_time_map[search_term] = statuses[-1].GetId()
 	
 	for status in statuses:
-		if status not in previous_statuses:
-			previous_statuses.append(status)
+		if status.GetText() not in previous_statuses and 'http://' not in status.GetText() and 'www.' not in status.GetText():
+			previous_statuses.append(status.GetText())
 			text = status.GetText()
+			text = re.sub('''[\.\:\!\|\?\,\-\=\<\>\/\\\]''', "" , text)
+			text = re.sub('''["']''', "", text)
 			words = text.split()
 			for i in range( len(words) - 2):
 				word_one = html_parser.unescape(words[i])
 				word_two = html_parser.unescape(words[i+1])
 				word_three = html_parser.unescape(words[i+2])
-						
-				key = (word_one , word_two)
-				value = word_three				
-				
-				start_sen_count = 1 if i == 0 else 0
-						
-				if key in data_map:
-					start_sen_count += data_map[key][1]
 					
-					data_map[key] = [data_map[key][0].append(value) , start_sen_count]
+
+				key = (word_one.lower() , word_two.lower())
+				value = word_three.lower()				
+				
+				if i == 0:
+					start_sen_count = 3
+					print key
+				else:  start_sen_count = 0				
+						
+				if key not in data_map:
+					data_map[key] = [[], 0]
 				else:
-					data_map[key] = [[value] , start_sen_count]
+					if '#' in value:
+						count = 0
+						for curr_list_item in data_map[key][0]:
+							if '#' in curr_list_item:
+								count += 1
+
+						if count > len(curr_list_item) / 2:
+							continue
+							
+				data_map[key][0].append(value)
+				data_map[key][1] += start_sen_count
 
 
 pickle.dump(data_map , open(data_filename_abs , "w"))
