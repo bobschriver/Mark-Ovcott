@@ -59,10 +59,7 @@ for search_term in search_terms:
 				key = (word_one.lower() , word_two.lower())
 				value = word_three.lower()				
 				
-				if i == 0:
-					start_sen_count = 3
-					print key
-				else:  start_sen_count = 0				
+				start_sen_count = 3 if i == 0 else 0			
 						
 				if key not in data_map:
 					data_map[key] = [[], 0]
