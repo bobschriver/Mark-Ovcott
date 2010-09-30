@@ -1,0 +1,6 @@
+This program pulls twitter posts marked with certain #tcot (Top Conservatives 
+On Twitter) hashtags and adds them to a serialized python map, which serves as
+a corpus for a Markov Generator 
+http://en.wikipedia.org/wiki/Markov_chain#Markov_text_generators. With this 
+method, the program can generate text that could feasibly be written
+by a conservative on twitter.
