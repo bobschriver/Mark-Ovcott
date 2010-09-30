@@ -44,34 +44,45 @@ for search_term in search_terms:
 	last_search_time_map[search_term] = statuses[-1].GetId()
 	
 	for status in statuses:
-		if status.GetText() not in previous_statuses and 'http://' not in status.GetText() and 'www.' not in status.GetText():
+		if status.GetText() not in previous_statuses and 'http://' not in status.GetText() and 'www.' not in status.GetText() and '.com' not in status.GetText():
 			previous_statuses.append(status.GetText())
 			text = status.GetText()
-			text = re.sub('''[\.\:\!\|\?\,\-\=\<\>\/\\\]''', "" , text)
-			text = re.sub('''["']''', "", text)
+			text = html_parser.unescape(text)
+			#some regex's to fix words attached to punctuation
+			text = re.sub('[\*\[\]\(\)\<\>]', '' , text)
+			text = re.sub('(\w)[\|\-\=\/\\\](\w)' , '\1 \2', text)
+			
+			#text = re.sub('([\(\{\[\<\"\*])(\w))', '\1 \2' , text)
+			#text = re.sub('(\w)([\]\}\)\>\"\*])' , '\1 \2' , text)
+
+			text = re.sub('"', '', text)
+
+			text = re.sub('([\.\?\!\,\:\;])(\w)', '\1 \2', text) 
 			words = text.split()
 			for i in range( len(words) - 2):
-				word_one = html_parser.unescape(words[i])
-				word_two = html_parser.unescape(words[i+1])
-				word_three = html_parser.unescape(words[i+2])
+				word_one = words[i].lower()
+				word_two = words[i+1].lower()
+				word_three = words[i+2].lower()
 					
 
-				key = (word_one.lower() , word_two.lower())
-				value = word_three.lower()				
+				key = (word_one , word_two)
+				value = word_three				
 				
-				start_sen_count = 3 if i == 0 else 0			
+				start_sen_count = len(data_map) / 1000 if i == 0 else 0			
 						
+				if word_one == word_two and word_two == word_three: continue
+
 				if key not in data_map:
 					data_map[key] = [[], 0]
-				else:
-					if '#' in value:
-						count = 0
-						for curr_list_item in data_map[key][0]:
-							if '#' in curr_list_item:
-								count += 1
-
-						if count > len(curr_list_item) / 2:
-							continue
+				#else:
+				#	if '#' in value:
+				#		count = 0
+				#		for curr_list_item in data_map[key][0]:
+				#			if '#' in curr_list_item:
+				#				count += 1
+				#
+				#		if count > len(curr_list_item) / 2:
+				#			continue
 							
 				data_map[key][0].append(value)
 				data_map[key][1] += start_sen_count
