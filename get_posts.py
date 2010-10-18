@@ -12,7 +12,7 @@ values = int(sys.argv[2])
 num_results = 100
 search_terms = ['#tcot' , '#teaparty' , '#wreckingcrew' , '#twisters' , '#gop' , '#ocra' , '#sgp']
 
-script_dir = "/users/u16/projects/personal/mark-ovcott/"
+script_dir = "/users/u16/schriver/projects/personal/mark_ovcott/"
 
 data_filename = "twitter_data"
 last_search_filename = "last_search_time"
@@ -66,7 +66,7 @@ for search_term in search_terms:
 			#remove URL's
 			text = re.sub("(http://)?(www\.)?\w+\.\w{2,3}.*\s", " " , text)
 			#Remove any doubled non word characters
-			text = re.sub("(\W)\W+" , "\1" , text)
+			text = re.sub("([^a-zA-Z0-9])\1+" , "\1" , text)
 			#Remove opening/closing punctuation so we don't have random open parens etc
 			text = re.sub("[\*\[\]\(\)\<\>]", "" , text)
 			#replace current word seperators with spaces
