@@ -1,25 +1,11 @@
-import pickle
+import cPickle as pickle
 import oauthtwitter
 import random
 
-def select_weighted():
-	total = 0
-	for key in data_map:
-		total += data_map[key][1]
-	print total
-
-	while True:
-		for key in data_map:
-			if data_map[key][1] > 0:
-				rand_num = random.random()
-				acc_prob = float(1.0 / (total - data_map[key][1]))
-				if rand_num <= acc_prob:
-					return key
-	return random.choice(data_map.keys())
-
 script_directory = "/users/u16/schriver/projects/personal/mark_ovcott/"
 
-data_map = pickle.load(open(script_directory + "twitter-data"))
+data_map = pickle.load(open(script_directory + "twitter_data"))
+start_sen_list = pickle.load(open(script_directory + "start_sen_count"))
 
 access_token = "191210353-J9YTr34SIo0J8gFlmSlxJxjcFlkb0Ucw86NQSnvw"
 access_token_secret = "OiG7X4yykQBWDUjsrFxwYPmCxhoZoLH9k1FTnCDndE"
@@ -37,18 +23,31 @@ api = oauthtwitter.OAuthApi(consumer_token, consumer_token_secret)
 
 api = oauthtwitter.OAuthApi(consumer_token, consumer_token_secret, access_token , access_token_secret)
 
-#status = ""
+status = ""
 
-key = select_weighted()
-status = key[0] + " " + key[1]
+key = random.choice(start_sen_list)
+for value in key:
+	status += value + " "
 
 print key
-print data_map[key][1]
+order = len(key)
+num_values = len(data_map[key][0])
 
 while key in data_map: #and len(status) < 140:
-	value = random.choice(data_map[key][0])
-	status += " " + value
-	key = (key[1], value)
+	values = random.choice(data_map[key])
+	print values
+	new_key = list()
+
+	for i in range(num_values , len(key)):
+		new_key.append(key[i])
+	
+	for value in values:
+		status += value + " "
+		new_key.append(value)
+	
+	key = tuple(new_key)
+
+	
 
 count = 0
 
