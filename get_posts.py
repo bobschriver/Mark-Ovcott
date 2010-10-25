@@ -5,6 +5,7 @@ import HTMLParser
 import re
 import sys
 import unicodedata
+import string
 
 order = int(sys.argv[1])
 values = int(sys.argv[2])
@@ -59,20 +60,29 @@ for search_term in search_terms:
 			
 			#lets first convert the text to something we can deal with
 			text = status.GetText()
+	
+			#This is kinda a hack untill I can get the two lines below to
+			#work properly.
+			text = "".join(c for c in text if c in string.printable)
 			text = html_parser.unescape(text)
 			unicodedata.normalize("NFKD" , text).encode("ascii", "ignore")
+			
 			text = text.lower()
 			
 			#remove URL's
 			text = re.sub("(http://)?(www\.)?\w+\.\w{2,3}.*\s", " " , text)
+			#Remove useless symbols
+			text = re.sub("[~`_^+]" , "" , text)
 			#Remove any doubled non word characters
-			text = re.sub("([^a-zA-Z0-9])\1+" , "\1" , text)
+			text = re.sub("([^a-zA-Z0-9])\\1+" , "\\1" , text)
 			#Remove opening/closing punctuation so we don't have random open parens etc
 			text = re.sub("[\*\[\]\(\)\<\>]", "" , text)
 			#replace current word seperators with spaces
-			text = re.sub("(\w)[\|\-\=\/\\\](\w)" , "\1 \2", text)
+			text = re.sub("(\w)[\|\-\=\/\\\](\w)" , "\\1 \\2", text)
 			#Put a space between the end of sentences
-			text = re.sub("(\w)([\.\?\!\,\:\;])(\w)", "\1\2 \3", text) 
+			text = re.sub("(\w)([\.\?\!\,\:\;])(\w)", "\\1\\2 \\3", text) 
+			#Split any current adjacent symbols
+			text = re.sub("([^a-zA-Z0-9 ])([^a-zA-Z0-9 ])" , "\\1 \\2" , text)
 
 			words = text.split()
 
