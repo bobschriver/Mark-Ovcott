@@ -6,22 +6,28 @@ import re
 import sys
 import unicodedata
 import string
+import random
 
-order = int(sys.argv[1])
-values = int(sys.argv[2])
+if len(sys.argv) == 2:
+	order = int(sys.argv[1])
+	values = int(sys.argv[2])
+else:
+	order = random.randint(2 , 5)
+	values = random.randint(1 , order - 1)
 
 num_results = 100
 search_terms = ['#tcot' , '#teaparty' , '#wreckingcrew' , '#twisters' , '#gop' , '#ocra' , '#sgp']
 
-script_dir = "/users/u16/schriver/projects/personal/mark_ovcott/"
+data_dir = sys.path[0] + "/data/"
+file_prefix = str(order) + str(values)
 
-data_filename = "twitter_data"
-last_search_filename = "last_search_time"
-start_sen_filename = "start_sen_count"
+data_filename = file_prefix + "_data"
+last_search_filename = file_prefix + "last_search"
+start_sen_filename = file_prefix + "start_sen"
 
-data_filename_abs = script_dir + data_filename
-last_search_filename_abs = script_dir + last_search_filename
-start_sen_filename_abs = script_dir + start_sen_filename
+data_filename_abs = data_dir + data_filename
+last_search_filename_abs = data_dir + last_search_filename
+start_sen_filename_abs = data_dir + start_sen_filename
 
 
 if not os.path.exists(data_filename_abs):

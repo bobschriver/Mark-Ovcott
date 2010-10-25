@@ -38,7 +38,8 @@ while key in data_map: #and len(status) < 140:
 	print values
 	new_key = list()
 
-	for i in range(num_values , len(key)):
+	print num_values, len(key), "\n"
+	for i in range(num_values, len(key)):
 		new_key.append(key[i])
 	
 	for value in values:
@@ -46,7 +47,7 @@ while key in data_map: #and len(status) < 140:
 		new_key.append(value)
 	
 	key = tuple(new_key)
-
+	print key
 	
 
 count = 0
