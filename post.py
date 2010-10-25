@@ -1,11 +1,18 @@
 import cPickle as pickle
 import oauthtwitter
 import random
+import sys
 
-script_directory = "/users/u16/schriver/projects/personal/mark_ovcott/"
+order = sys.argv[1]
+values = sys.argv[2]
 
-data_map = pickle.load(open(script_directory + "twitter_data"))
-start_sen_list = pickle.load(open(script_directory + "start_sen_count"))
+data_directory = sys.path[0] + "/data/"
+
+data_filename = data_directory + order + values + "_data"
+start_sen_filename = data_directory + order + values + "start_sen"
+
+data_map = pickle.load(open(data_filename))
+start_sen_list = pickle.load(open(start_sen_filename))
 
 access_token = "191210353-J9YTr34SIo0J8gFlmSlxJxjcFlkb0Ucw86NQSnvw"
 access_token_secret = "OiG7X4yykQBWDUjsrFxwYPmCxhoZoLH9k1FTnCDndE"
