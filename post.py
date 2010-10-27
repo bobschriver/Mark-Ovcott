@@ -3,13 +3,18 @@ import oauthtwitter
 import random
 import sys
 
-order = sys.argv[1]
-values = sys.argv[2]
+if len(sys.argv) == 3:
+	order = sys.argv[1]
+	num_values = sys.argv[2]
+else:
+	order = random.randint(2 , 5)
+	num_values = str(random.randint(1 , order))
+	order = str(order)
 
 data_directory = sys.path[0] + "/data/"
 
-data_filename = data_directory + order + values + "_data"
-start_sen_filename = data_directory + order + values + "start_sen"
+data_filename = data_directory + order + num_values + "_data"
+start_sen_filename = data_directory + order + num_values + "start_sen"
 
 data_map = pickle.load(open(data_filename))
 start_sen_list = pickle.load(open(start_sen_filename))
@@ -37,16 +42,12 @@ for value in key:
 	status += value + " "
 
 print key
-order = len(key)
-num_values = len(data_map[key][0])
 
-while key in data_map: #and len(status) < 140:
+while key in data_map and len(status) < 137:
 	values = random.choice(data_map[key])
-	print values
 	new_key = list()
 
-	print num_values, len(key), "\n"
-	for i in range(num_values, len(key)):
+	for i in range(int(num_values), len(key)):
 		new_key.append(key[i])
 	
 	for value in values:
@@ -57,18 +58,16 @@ while key in data_map: #and len(status) < 140:
 	print key
 	
 
+status +=  order + num_values
+
 count = 0
 
-
 for pair in data_map:
-	count += len(data_map[pair][0])
-	#print pair
-	#print data_map[pair][0]
-	#print data_map[pair][1]
+	count += len(data_map[pair])
 
 print status
 print len(data_map)
 print count
 
-#api.UpdateStatus(status)
+api.UpdateStatus(status)
 
