@@ -8,7 +8,7 @@ if len(sys.argv) == 3:
 	num_values = sys.argv[2]
 else:
 	order = random.randint(2 , 5)
-	num_values = str(random.randint(1 , order))
+	num_values = str(random.randint(1 , order - 1))
 	order = str(order)
 
 data_directory = sys.path[0] + "/data/"
